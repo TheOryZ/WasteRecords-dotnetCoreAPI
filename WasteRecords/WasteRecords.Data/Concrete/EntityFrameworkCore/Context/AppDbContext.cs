@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WasteRecords.Core.Entities;
+using WasteRecords.Data.Concrete.EntityFrameworkCore.Configurations;
 
 namespace WasteRecords.Data.Concrete.EntityFrameworkCore.Context
 {
@@ -20,6 +21,21 @@ namespace WasteRecords.Data.Concrete.EntityFrameworkCore.Context
         {
             optionsBuilder.UseSqlServer(_configuration.GetConnectionString("EntityFrameWorkConnectionString"));
             base.OnConfiguring(optionsBuilder);
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            #region Configurations
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new StoreConfiguration());
+            modelBuilder.ApplyConfiguration(new UnitConfiguration());
+            modelBuilder.ApplyConfiguration(new WasteTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new KindOfWasteConfiguration());
+            modelBuilder.ApplyConfiguration(new ReceivingCompanyConfiguration());
+            modelBuilder.ApplyConfiguration(new RecordConfiguration());
+            #endregion
+            #region Seeds
+
+            #endregion
         }
 
         public DbSet<User> Users { get; set; }
