@@ -17,5 +17,11 @@ namespace WasteRecords.Core.Entities
         public DateTime? CreatedDate { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
+
+        public virtual Store Store { get; set; }
+        public virtual Unit Unit { get; set; }
+        public virtual WasteType WasteType { get; set; }
+        public virtual KindOfWaste KindOfWaste { get; set; }
+        public virtual ReceivingCompany ReceivingCompany { get; set; }
     }
 }
