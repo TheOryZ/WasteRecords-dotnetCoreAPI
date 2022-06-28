@@ -8,10 +8,6 @@ namespace WasteRecords.Core.Helpers
         public string Message { get; set; }
         public bool IsSuccess { get; set; }
         public Error Errors { get; set; }
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
     public class Response<T>
     {
@@ -20,10 +16,6 @@ namespace WasteRecords.Core.Helpers
         public bool IsSuccess { get; set; }
         public Error Errors { get; set; }
         public T Content { get; set; }
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 
     public class Error

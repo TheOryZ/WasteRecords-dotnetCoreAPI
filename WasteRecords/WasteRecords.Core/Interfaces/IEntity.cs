@@ -1,6 +1,6 @@
-﻿namespace WasteRecords.Core.Entities
+﻿namespace WasteRecords.Core.Interfaces
 {
-    public abstract class BaseEntity
+    public interface IEntity
     {
         public int Id { get; set; }
         public DateTime? CreatedDate { get; set; }

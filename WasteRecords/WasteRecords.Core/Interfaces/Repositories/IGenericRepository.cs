@@ -2,7 +2,7 @@
 
 namespace WasteRecords.Core.Interfaces.Repositories
 {
-    public interface IGenericRepository<TEntity> where TEntity : class, new()
+    public interface IGenericRepository<TEntity> where TEntity : class, IEntity, new()
     {
         Task<TEntity> GetByIdAsync(int id);
         Task<IEnumerable<TEntity>> GetAllAsync();

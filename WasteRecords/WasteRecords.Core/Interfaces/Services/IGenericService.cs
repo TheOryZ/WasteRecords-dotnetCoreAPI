@@ -2,7 +2,7 @@
 
 namespace WasteRecords.Core.Interfaces.Services
 {
-    public interface IGenericService<TEntity> where TEntity : class, new()
+    public interface IGenericService<TEntity> where TEntity : class, IEntity, new()
     {
         Task<TEntity> GetByIdAsync(int id);
         Task<IEnumerable<TEntity>> GetAllAsync();
