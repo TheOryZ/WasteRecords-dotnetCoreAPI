@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WasteRecords.Core.Entities;
 using WasteRecords.Data.Concrete.EntityFrameworkCore.Configurations;
+using WasteRecords.Data.Concrete.EntityFrameworkCore.Seeds;
 
 namespace WasteRecords.Data.Concrete.EntityFrameworkCore.Context
 {
@@ -34,7 +35,12 @@ namespace WasteRecords.Data.Concrete.EntityFrameworkCore.Context
             modelBuilder.ApplyConfiguration(new RecordConfiguration());
             #endregion
             #region Seeds
-
+            modelBuilder.ApplyConfiguration(new UserSeed());
+            modelBuilder.ApplyConfiguration(new StoreSeed());
+            modelBuilder.ApplyConfiguration(new UnitSeed());
+            modelBuilder.ApplyConfiguration(new WasteTypeSeed());
+            modelBuilder.ApplyConfiguration(new KindOfWasteSeed());
+            modelBuilder.ApplyConfiguration(new ReceivingCompanySeed());
             #endregion
         }
 

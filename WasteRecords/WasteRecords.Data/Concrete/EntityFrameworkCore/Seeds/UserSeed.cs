@@ -1,0 +1,16 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using WasteRecords.Core.Entities;
+
+namespace WasteRecords.Data.Concrete.EntityFrameworkCore.Seeds
+{
+    public class UserSeed : IEntityTypeConfiguration<User>
+    {
+        public void Configure(EntityTypeBuilder<User> builder)
+        {
+            builder.HasData(
+                new User { Name="John Doe", Email="admin@admin.com",Password="admin123"}
+                );
+        }
+    }
+}
