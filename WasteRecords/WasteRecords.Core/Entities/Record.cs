@@ -11,6 +11,9 @@ namespace WasteRecords.Core.Entities
         public int UnitId { get; set; }
         public int ReceivingCompanyId { get; set; }
         public decimal Quantity { get; set; }
+        public DateTime? OperationDate { get; set; }
+        public string Content { get; set; }
+        public string ContentLanguage { get; set; }
         public DateTime? CreatedDate { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
