@@ -9,10 +9,10 @@ namespace WasteRecords.Data.Concrete.EntityFrameworkCore.Seeds
         public void Configure(EntityTypeBuilder<KindOfWaste> builder)
         {
             builder.HasData(
-                new KindOfWaste { Description = "Konserve"},
-                new KindOfWaste { Description = "Unlu Mamüller" },
-                new KindOfWaste { Description = "Şaraplar" },
-                new KindOfWaste { Description = "Et" }
+                new KindOfWaste { Id = 1, Description = "Konserve"},
+                new KindOfWaste { Id = 2, Description = "Unlu Mamüller" },
+                new KindOfWaste { Id = 3, Description = "Şaraplar" },
+                new KindOfWaste { Id = 4, Description = "Et" }
                 );
         }
     }

@@ -9,8 +9,8 @@ namespace WasteRecords.Data.Concrete.EntityFrameworkCore.Seeds
         public void Configure(EntityTypeBuilder<WasteType> builder)
         {
             builder.HasData(
-                new WasteType { Description = "Çöp"},
-                new WasteType { Description = "Barınak" }
+                new WasteType { Id = 1, Description = "Çöp"},
+                new WasteType { Id = 2, Description = "Barınak" }
                 );
         }
     }

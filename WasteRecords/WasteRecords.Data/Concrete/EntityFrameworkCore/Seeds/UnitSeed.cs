@@ -9,8 +9,8 @@ namespace WasteRecords.Data.Concrete.EntityFrameworkCore.Seeds
         public void Configure(EntityTypeBuilder<Unit> builder)
         {
             builder.HasData(
-                new Unit { Description = "KG"},
-                new Unit { Description = "Adet" }
+                new Unit { Id = 1, Description = "KG"},
+                new Unit { Id = 2, Description = "Adet" }
                 );
         }
     }

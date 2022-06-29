@@ -9,9 +9,9 @@ namespace WasteRecords.Data.Concrete.EntityFrameworkCore.Seeds
         public void Configure(EntityTypeBuilder<ReceivingCompany> builder)
         {
             builder.HasData(
-                new ReceivingCompany { Description = "Çöp - Belediye"},
-                new ReceivingCompany { Description = "Hayvan Barınağı" },
-                new ReceivingCompany { Description = "Geri Dönüşüm" }
+                new ReceivingCompany { Id = 1, Description = "Çöp - Belediye"},
+                new ReceivingCompany { Id = 2, Description = "Hayvan Barınağı" },
+                new ReceivingCompany { Id = 3, Description = "Geri Dönüşüm" }
                 );
         }
     }

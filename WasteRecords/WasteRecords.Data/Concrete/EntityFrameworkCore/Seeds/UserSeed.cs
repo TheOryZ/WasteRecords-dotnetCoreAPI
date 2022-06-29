@@ -9,7 +9,7 @@ namespace WasteRecords.Data.Concrete.EntityFrameworkCore.Seeds
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.HasData(
-                new User { Name="John Doe", Email="admin@admin.com",Password="admin123"}
+                new User { Id = 1, Name ="John Doe", Email="admin@admin.com",Password="admin123"}
                 );
         }
     }
