@@ -12,6 +12,7 @@ using WasteRecords.Core.Interfaces.Services;
 using WasteRecords.Data.Concrete.EntityFrameworkCore.Context;
 using WasteRecords.Data.Concrete.EntityFrameworkCore.Repositories;
 using WasteRecords.Service.Services;
+using WasteRecords.Service.Tools.JWT;
 using WasteRecords.Service.ValidationRules.FluentValidation;
 
 namespace WasteRecords.Service.Containers.MicrosoftIoC
@@ -60,7 +61,7 @@ namespace WasteRecords.Service.Containers.MicrosoftIoC
             services.AddTransient<IValidator<RecordUpdateDto>, RecordUpdateValidator>();
             #endregion
             #region JWT
-
+            services.AddScoped<IJwtService, JwtService>();
             #endregion
         }
     }
