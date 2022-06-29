@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 using WasteRecords.API.CustomFilters;
+using WasteRecords.Core.Helpers;
 using WasteRecords.Service.Containers.MicrosoftIoC;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +28,26 @@ builder.Services.AddSwaggerGen(c =>
     });
     c.OperationFilter<AuthResponsesOperationFilter>();
 });
+builder.Services.Configure<JwtInfo>(builder.Configuration.GetSection("JWTInfo"));
+var jwtInfo = builder.Configuration.GetSection("JWTInfo").Get<JwtInfo>();
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+}).AddJwtBearer(opt => {
+    opt.RequireHttpsMetadata = false;
+    opt.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = jwtInfo.Issuer,
+        ValidAudience = jwtInfo.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtInfo.SecurityKey)),
+        ValidateLifetime = true,
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ClockSkew = TimeSpan.Zero
+    };
+});
 
 var app = builder.Build();
 
@@ -34,6 +58,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
