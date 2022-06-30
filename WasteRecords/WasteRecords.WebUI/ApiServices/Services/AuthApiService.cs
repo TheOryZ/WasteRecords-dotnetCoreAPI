@@ -24,8 +24,8 @@ namespace WasteRecords.WebUI.ApiServices.Services
             var response = _accessRest.PostMethod<JwtTokenModel>(model, uri);
             if (response.IsSuccess)
             {
-                var token = response.Content.token;
-                //_httpContextAccessor.HttpContext.Session.SetString("token", token);
+                string token = response.Content.token;
+                _httpContextAccessor.HttpContext.Session.SetString("token", token);
                 return true;
             }
             return false;
