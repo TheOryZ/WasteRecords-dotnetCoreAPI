@@ -1,8 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using WasteRecords.WebUI.ApiServices.Interfaces;
 using WasteRecords.WebUI.Models;
+using WasteRecords.WebUI.Models.KinfOfWaste;
+using WasteRecords.WebUI.Models.ReceivingCompany;
+using WasteRecords.WebUI.Models.RecordModels;
+using WasteRecords.WebUI.Models.Store;
+using WasteRecords.WebUI.Models.Unit;
 using WasteRecords.WebUI.Models.UserModels;
+using WasteRecords.WebUI.Models.WasteType;
 
 namespace WasteRecords.WebUI.Controllers
 {
@@ -10,11 +17,25 @@ namespace WasteRecords.WebUI.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IAuthApiService _authApiService;
+        private readonly IUnitApiService _unitApiService;
+        private readonly IStoreApiService _storeApiService;
+        private readonly IWasteTypeApiService _wasteTypeApiService;
+        private readonly IKindOfWasteApiService _kindOfWasteApiService;
+        private readonly IReceivingCompanyApiService _receivingCompanyApiService;
+        private readonly IRecordApiService _recordApiService;
 
-        public HomeController(ILogger<HomeController> logger, IAuthApiService authApiService)
+        public HomeController(ILogger<HomeController> logger, IAuthApiService authApiService, IUnitApiService unitApiService, 
+            IStoreApiService storeApiService, IWasteTypeApiService wasteTypeApiService, IKindOfWasteApiService kindOfWasteApiService, 
+            IReceivingCompanyApiService receivingCompanyApiService, IRecordApiService recordApiService)
         {
             _logger = logger;
             _authApiService = authApiService;
+            _unitApiService = unitApiService;
+            _storeApiService = storeApiService;
+            _wasteTypeApiService = wasteTypeApiService;
+            _kindOfWasteApiService = kindOfWasteApiService;
+            _receivingCompanyApiService = receivingCompanyApiService;
+            _recordApiService = recordApiService;
         }
 
         public IActionResult Index()
@@ -36,6 +57,73 @@ namespace WasteRecords.WebUI.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return View(model);
+        }
+
+        public JsonResult GetInformationById(int id)
+        {
+            //models
+            List<UnitListViewModel> unitListViewModel = new List<UnitListViewModel>();
+            List<StoreListViewModel> storeListViewModel = new List<StoreListViewModel>();
+            List<WasteTypeListViewModel> wasteTypeListViewModel = new List<WasteTypeListViewModel>();
+            List<KindOfWasteListViewModel> kindOfWasteListViewModel = new List<KindOfWasteListViewModel>();
+            List<ReceivingCompanyListViewModel> receivingCompanyListViewModel = new List<ReceivingCompanyListViewModel>();
+            RecordListViewModel recordListViewModel = new RecordListViewModel();
+            //apiServices
+            var responseUnit = _unitApiService.GetAll();
+            unitListViewModel = responseUnit.Content;
+            var responseStore = _storeApiService.GetAll();
+            storeListViewModel = responseStore.Content;
+            var responseWasteType = _wasteTypeApiService.GetAll();
+            wasteTypeListViewModel = responseWasteType.Content;
+            var responseKindOfWaste = _kindOfWasteApiService.GetAll();
+            kindOfWasteListViewModel = responseKindOfWaste.Content;
+            var responseCompany = _receivingCompanyApiService.GetAll();
+            receivingCompanyListViewModel = responseCompany.Content;
+            var responseRecord = _recordApiService.GetById(id);
+            recordListViewModel = responseRecord.Content;
+            //Model bind
+            IndexViewModel model = new IndexViewModel()
+            {
+                Record = recordListViewModel,
+                Stores = storeListViewModel,
+                Units = unitListViewModel,
+                wasteTypes = wasteTypeListViewModel,
+                KindOfWastes = kindOfWasteListViewModel,
+                ReceivingCompanies = receivingCompanyListViewModel
+            };
+            var result = JsonConvert.SerializeObject(model);
+            return Json(result);
+        }
+        public JsonResult GetInformations()
+        {
+            //models
+            List<UnitListViewModel> unitListViewModel = new List<UnitListViewModel>();
+            List<StoreListViewModel> storeListViewModel = new List<StoreListViewModel>();
+            List<WasteTypeListViewModel> wasteTypeListViewModel = new List<WasteTypeListViewModel>();
+            List<KindOfWasteListViewModel> kindOfWasteListViewModel = new List<KindOfWasteListViewModel>();
+            List<ReceivingCompanyListViewModel> receivingCompanyListViewModel = new List<ReceivingCompanyListViewModel>();
+            //apiServices
+            var responseUnit = _unitApiService.GetAll();
+            unitListViewModel = responseUnit.Content;
+            var responseStore = _storeApiService.GetAll();
+            storeListViewModel = responseStore.Content;
+            var responseWasteType = _wasteTypeApiService.GetAll();
+            wasteTypeListViewModel = responseWasteType.Content;
+            var responseKindOfWaste = _kindOfWasteApiService.GetAll();
+            kindOfWasteListViewModel = responseKindOfWaste.Content;
+            var responseCompany = _receivingCompanyApiService.GetAll();
+            receivingCompanyListViewModel = responseCompany.Content;
+            //Model bind
+            IndexViewModel model = new IndexViewModel()
+            {
+                Stores = storeListViewModel,
+                Units = unitListViewModel,
+                wasteTypes = wasteTypeListViewModel,
+                KindOfWastes = kindOfWasteListViewModel,
+                ReceivingCompanies = receivingCompanyListViewModel
+            };
+            var result = JsonConvert.SerializeObject(model);
+            return Json(result);
         }
     }
 }
