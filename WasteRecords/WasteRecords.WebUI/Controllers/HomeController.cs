@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WasteRecords.WebUI.Models;
+using WasteRecords.WebUI.Models.UserModels;
 
 namespace WasteRecords.WebUI.Controllers
 {
@@ -17,16 +18,21 @@ namespace WasteRecords.WebUI.Controllers
         {
             return View();
         }
-
-        public IActionResult Privacy()
+        public IActionResult SignIn()
         {
             return View();
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        public IActionResult SignIn(SignInViewModel model)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            TempData["message"] = "Email or Password is wrong";
+            TempData["status"] = "error";
+            if (false)//(_authApiService.SignIn(model))
+            {
+                TempData["status"] = "success";
+                return RedirectToAction("Index", "Home");
+            }
+            return View(model);
         }
     }
 }
