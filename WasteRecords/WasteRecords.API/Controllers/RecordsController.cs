@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WasteRecords.API.CustomFilters;
 using WasteRecords.Core.Dtos.Record;
+using WasteRecords.Core.Entities;
 using WasteRecords.Core.Helpers;
 using WasteRecords.Core.Interfaces.Services;
 
@@ -52,6 +55,82 @@ namespace WasteRecords.API.Controllers
                 response.IsSuccess = false;
                 response.Errors = new Dictionary<string, List<string>>(){
                     {"BadRequest", new List<string>(){ "This record number is does not exist" }} 
+                };
+                return BadRequest(response);
+            }
+        }
+        [HttpPost]
+        [ValidModel]
+        [Authorize]
+        public async Task<IActionResult> Add(RecordAddDto recordAddDto)
+        {
+            var recordModel = await _recordService.AddAsync(_mapper.Map<Record>(recordAddDto));
+            Response<RecordListDto> response = new();
+            if(recordModel != null)
+            {
+                response.Message = "Success";
+                response.StatusCode = 201;
+                response.IsSuccess = true;
+                response.Content = _mapper.Map<RecordListDto>(recordModel);
+                return Created("", response);
+            }
+            else
+            {
+                response.Message = "Fail";
+                response.StatusCode = 404;
+                response.IsSuccess = false;
+                response.Errors = new Dictionary<string, List<string>>(){
+                    {"BadRequest", new List<string>(){ "This record could not be added" }}
+                };
+                return BadRequest(response);
+            }
+        }
+        [HttpPut]
+        [ValidModel]
+        [Authorize]
+        public IActionResult Update(RecordUpdateDto recordUpdateDto)
+        {
+            var recordModel = _recordService.Update(_mapper.Map<Record>(recordUpdateDto));
+            Response<RecordListDto> response = new();
+            if (recordModel != null)
+            {
+                response.Message = "Success";
+                response.StatusCode = 204;
+                response.IsSuccess = true;
+                return Ok(response);
+            }
+            else
+            {
+                response.Message = "Fail";
+                response.StatusCode = 404;
+                response.IsSuccess = false;
+                response.Errors = new Dictionary<string, List<string>>(){
+                    {"BadRequest", new List<string>(){ "This record could not be updated" }}
+                };
+                return BadRequest(response);
+            }
+        }
+        [HttpDelete("{id}")]
+        [Authorize]
+        public IActionResult Remove(int id)
+        {
+            var recordModel = _recordService.GetByIdAsync(id).Result;
+            _recordService.Remove(recordModel);
+            Response<RecordListDto> response = new();
+            if (recordModel != null)
+            {
+                response.Message = "Success";
+                response.StatusCode = 204;
+                response.IsSuccess = true;
+                return Ok(response);
+            }
+            else
+            {
+                response.Message = "Fail";
+                response.StatusCode = 404;
+                response.IsSuccess = false;
+                response.Errors = new Dictionary<string, List<string>>(){
+                    {"BadRequest", new List<string>(){ "This record could not be deleted" }}
                 };
                 return BadRequest(response);
             }

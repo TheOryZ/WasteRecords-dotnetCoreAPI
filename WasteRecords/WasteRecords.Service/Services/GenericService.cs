@@ -11,14 +11,16 @@ namespace WasteRecords.Service.Services
         {
             _genericRepository = genericRepository;
         }
-        public async Task AddAsync(TEntity entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
             await _genericRepository.AddAsync(entity);
+            return entity;
         }
 
-        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
+        public async Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities)
         {
             await _genericRepository.AddRangeAsync(entities);
+            return entities;
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
