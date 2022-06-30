@@ -20,7 +20,7 @@ namespace WasteRecords.WebUI.ApiServices.Services
         }
         public ResponseState<List<ReceivingCompanyListViewModel>> GetAll()
         {
-            var uri = string.Format("{0}/{1}", url, "ReceivingCompany");
+            var uri = string.Format("{0}/{1}", url, "ReceivingCompanies");
             return _accessRest.GetMethod<List<ReceivingCompanyListViewModel>>(uri);
         }
     }

@@ -85,7 +85,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Ay*</label>
-                                    <select id="mount" class="form-control" required placeholder="Seçiniz">
+                                    <select id="mount" class="form-select" required placeholder="Seçiniz">
+                                        <option value="-1">Seçiniz</option>
                                         <option value="Ocak">Ocak</option>
                                         <option value="Şubat">Şubat</option>
                                         <option value="Mart">Mart</option>
@@ -105,7 +106,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Mağaza*</label>
-                                    <select id="store" class="form-control" required placeholder="Seçiniz">
+                                    <select id="store" class="form-select" required placeholder="Seçiniz">
                                     </select>
                                 </div>
                             </div>
@@ -115,7 +116,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Atık Tipi*</label>
-                                    <select id="wasteType" class="form-control" required placeholder="Seçiniz">
+                                    <select id="wasteType" class="form-select" required placeholder="Seçiniz">
                                     </select>
                                 </div>
                             </div>
@@ -123,7 +124,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Atık Çeşidi*</label>
-                                    <select id="kindOfWaste" class="form-control" required placeholder="Seçiniz">
+                                    <select id="kindOfWaste" class="form-select" required placeholder="Seçiniz">
                                     </select>
                                 </div>
                             </div>
@@ -140,7 +141,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Birim*</label>
-                                    <select id="unit" class="form-control" required placeholder="Seçiniz">
+                                    <select id="unit" class="form-select" required placeholder="Seçiniz">
                                     </select>
                                 </div>
                             </div>
@@ -150,7 +151,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Teslim Alan Firma*</label>
-                                    <select id="receivingCompany" class="form-control" required placeholder="Seçiniz">
+                                    <select id="receivingCompany" class="form-select" required placeholder="Seçiniz">
                                     </select>
                                 </div>
                             </div>
@@ -158,7 +159,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Atık Tarihi*</label>
-                                    <input id="wasteDate" class="form-control" type="datetime-local">
+                                    <input id="wasteDate" class="form-control" type="datetime-local" value="@DateTime.Now.ToString("dd.MM.yyyy hh:mm")">
                                 </div>
                             </div>
                         </div>
@@ -211,28 +212,46 @@
 <script>
     function CreateRecord() {
         $("#createModal").toggle();
-         $.ajax({
-                type: "POST",
-                url: url,
-                data: form.serialize(), // serializes the form's elements.
-                success: function (data) {
-                    if (data.success) {
 
-                        if ($("#remember").prop("checked")) {
-                            sessionStorage.setItem("userEmail", $("#eMail").val());
-                        } else {
-                            sessionStorage.removeItem("userEmail");
-                        }
-                        window.location.href = data.url;
-                    }
-                    else {
-                        SweetAlert('error', '', data.message, 'Tamam');
-                        //$("#validationModal .modal-body").html(data.message);
-                        //$("#validationModal").modal("show");
-                    }
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetInformations","Home")',
 
-                }
-            });
+            success: function(data) {
+                var response = JSON.parse(data);
+
+                let txtStore = "";
+                $.each(response.Stores, function(index, value) {
+                    txtStore += "<option value='" + value.Id + "'>" + value.Name + "</option>";
+                });
+                $("#store").append(txtStore);
+
+                let txtWasteType = "";
+                $.each(response.wasteTypes, function(index, value) {
+                    txtWasteType += "<option value='" + value.Id + "'>" + value.Description + "</option>";
+                });
+                $("#wasteType").append(txtWasteType);
+
+                let txtKindOfWastes = "";
+                $.each(response.KindOfWastes, function(index, value) {
+                    txtKindOfWastes += "<option value='" + value.Id + "'>" + value.Description + "</option>";
+                });
+                $("#kindOfWaste").append(txtKindOfWastes);
+
+                let txtUnits = "";
+                $.each(response.Units, function(index, value) {
+                    txtUnits += "<option value='" + value.Id + "'>" + value.Description + "</option>";
+                });
+                $("#unit").append(txtUnits);
+
+                let txtReceivingCompanies = "";
+                $.each(response.ReceivingCompanies, function(index, value) {
+                    txtReceivingCompanies += "<option value='" + value.Id + "'>" + value.Description + "</option>";
+                });
+                $("#receivingCompany").append(txtReceivingCompanies);
+
+            }
+        });
     }
 
     function CloseModal() {

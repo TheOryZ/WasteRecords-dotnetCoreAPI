@@ -21,7 +21,7 @@ namespace WasteRecords.WebUI.ApiServices.Services
         }
         public ResponseState<List<WasteTypeListViewModel>> GetAll()
         {
-            var uri = string.Format("{0}/{1}", url, "WasteType");
+            var uri = string.Format("{0}/{1}", url, "WasteTypes");
             return _accessRest.GetMethod<List<WasteTypeListViewModel>>(uri);
         }
     }

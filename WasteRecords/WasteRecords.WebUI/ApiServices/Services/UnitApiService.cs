@@ -20,7 +20,7 @@ namespace WasteRecords.WebUI.ApiServices.Services
         }
         public ResponseState<List<UnitListViewModel>> GetAll()
         {
-            var uri = string.Format("{0}/{1}", url, "Unit");
+            var uri = string.Format("{0}/{1}", url, "Units");
             return _accessRest.GetMethod<List<UnitListViewModel>>(uri);
         }
     }
