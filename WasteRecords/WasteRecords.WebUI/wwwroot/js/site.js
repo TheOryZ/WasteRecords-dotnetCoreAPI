@@ -2,7 +2,12 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+$(document).ready(function () {
+    $('.dataTable').DataTable({
+        "scrollX": true
 
+    });
+});
 function SweetAlert(state, title, text, redirectUrl) {
     let timerInterval
     Swal.fire({

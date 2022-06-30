@@ -1,8 +1,223 @@
-﻿@{
+﻿@model List<RecordListWithRelationsViewModel>
+@{
     ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">İşlemler</h3>
+                <div class="card-tools">
+                    <button type="button" onclick="CreateRecord()" class="btn btn-outline btn-success" data-card-widget="collapse">
+                        Ekle
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table class="table table-bordered table-hover table-sm dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th class="text-center">Atık Tarihi</th>
+                            <th class="text-center">Ay</th>
+                            <th class="text-center">Mağaza</th>
+                            <th class="text-center">Atık Tipi</th>
+                            <th class="text-center">Atık Çeşidi</th>
+                            <th class="text-center">Miktar</th>
+                            <th class="text-center">Birim</th>
+                            <th class="text-center">Teslim Alan Firma</th>
+                            <th class="text-center">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">6389</td>
+                            <td class="text-center">-</td>
+                            <td class="text-center">ŞUBAT</td>
+                            <td class="text-center">AKSARAY</td>
+                            <td class="text-center">ÇÖP</td>
+                            <td class="text-center">ŞARAPLAR</td>
+                            <td class="text-center">1</td>
+                            <td class="text-center">ADET</td>
+                            <td class="text-center">ÇÖP-BELEDİYE</td>
+                            <td class="text-center"><button>...</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal" id="transactionModal" data-toggle="modal" tabindex="-1" role="dialog">
+    
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sistem Mesajı</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card card-secondary">
+                        <div class="card-header">
+                            <h3 class="card-title">Kayıt İşlemi</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <div class="card-body">
+                            <div class="row col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Ay*</label>
+                                        <select required placeholder="Seçiniz">
+                                            <option value="1">test</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Mağaza*</label>
+                                        <select required placeholder="Seçiniz">
+                                            <option value="1">test</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Atık Tipi*</label>
+                                        <select required placeholder="Seçiniz">
+                                            <option value="1">test</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Atık Çeşidi*</label>
+                                        <select required placeholder="Seçiniz">
+                                            <option value="1">test</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Miktar*</label>
+                                        <select required placeholder="Seçiniz">
+                                            <option value="1">test</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Birim*</label>
+                                        <select required placeholder="Seçiniz">
+                                            <option value="1">test</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Teslim Alan Firma*</label>
+                                        <select required placeholder="Seçiniz">
+                                            <option value="1">test</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Atık Tarihi*</label>
+                                        <input type="datetime-local">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row col-md-12">
+                                <div class="col-md-6">
+                                    <input type="radio" name="language" value="Türkçe">
+                                    <input type="radio" name="language" value="English">
+                                </div>
+                            </div>
+
+
+                            <div class="row col-md-12">
+                                <input type="textarea">
+                            </div>
+
+                            <!-- /.card-body -->
+
+                            <div class="card-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <button type="button"  class="btn btn-danger">Kapat</button>
+                </div>
+            </div>
+        </div>
+   
+
 </div>
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    function CreateRecord() {
+        $("#transactionModal").toggle();
+    }
+</script>
