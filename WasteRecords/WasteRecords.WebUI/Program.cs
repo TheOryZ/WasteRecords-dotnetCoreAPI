@@ -11,6 +11,7 @@ builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IAccessRest, GenericRestAccess>();
 builder.Services.AddScoped<IAuthApiService, AuthApiService>();
+builder.Services.AddScoped<IRecordApiService, RecordApiService>();
 
 var app = builder.Build();
 
@@ -20,7 +21,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
 }
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();
