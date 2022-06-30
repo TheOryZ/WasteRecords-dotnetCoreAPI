@@ -12,6 +12,11 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddScoped<IAccessRest, GenericRestAccess>();
 builder.Services.AddScoped<IAuthApiService, AuthApiService>();
 builder.Services.AddScoped<IRecordApiService, RecordApiService>();
+builder.Services.AddScoped<IStoreApiService, StoreApiService>();
+builder.Services.AddScoped<IUnitApiService, UnitApiService>();
+builder.Services.AddScoped<IWasteTypeApiService, WasteTypeApiService>();
+builder.Services.AddScoped<IKindOfWasteApiService, KindOfWasteApiService>();
+builder.Services.AddScoped<IReceivingCompanyApiService, ReceivingCompanyApiService>();
 
 var app = builder.Build();
 
