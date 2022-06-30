@@ -35,6 +35,19 @@ namespace WasteRecords.API.Controllers
             };
             return Ok(response);
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAllWithParameters()
+        {
+            var records = await _recordService.GetAllWithParametersAsync();
+            Response<List<RecordListWithRelationsDto>> response = new()
+            {
+                Message = "Success",
+                IsSuccess = true,
+                StatusCode = 200,
+                Content = _mapper.Map<List<RecordListWithRelationsDto>>(records)
+            };
+            return Ok(response);
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
