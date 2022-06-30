@@ -28,14 +28,16 @@ namespace WasteRecords.API.Controllers
         [ValidModel]
         public async Task<IActionResult> SignIn(UserSignInDto userSignInDto)
         {
-            Response<string> response = new Response<string>();
+            Response<JwtTokenModel> response = new Response<JwtTokenModel>();
             var user = await _userService.CheckUserAsync(_mapper.Map<User>(userSignInDto));
             if(user != null)
             {
+                JwtTokenModel token = new();
+                token.token = _jwtService.GenerateJwt(user).Token;
                 response.Message = "Login is success";
-                response.StatusCode = 201;
+                response.StatusCode = 200;
                 response.IsSuccess = true;
-                response.Content = _jwtService.GenerateJwt(user).Token;
+                response.Content = token;
                 return Created("", response);
             }
             else

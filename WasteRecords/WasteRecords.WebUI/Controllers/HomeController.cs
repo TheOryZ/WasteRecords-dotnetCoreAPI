@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using WasteRecords.WebUI.ApiServices.Interfaces;
 using WasteRecords.WebUI.Models;
 using WasteRecords.WebUI.Models.UserModels;
 
@@ -8,10 +9,12 @@ namespace WasteRecords.WebUI.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IAuthApiService _authApiService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IAuthApiService authApiService)
         {
             _logger = logger;
+            _authApiService = authApiService;
         }
 
         public IActionResult Index()
@@ -27,7 +30,7 @@ namespace WasteRecords.WebUI.Controllers
         {
             TempData["message"] = "Email or Password is wrong";
             TempData["status"] = "error";
-            if (false)//(_authApiService.SignIn(model))
+            if (_authApiService.SignIn(model))
             {
                 TempData["status"] = "success";
                 return RedirectToAction("Index", "Home");
