@@ -32,22 +32,32 @@
                             <th class="text-center">Miktar</th>
                             <th class="text-center">Birim</th>
                             <th class="text-center">Teslim Alan Firma</th>
-                            <th class="text-center">İşlemler</th>
+                            <th class="text-center">Düzenle</th>
+                            <th class="text-center">Sil</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="text-center">6389</td>
-                            <td class="text-center">-</td>
+                        @if (Model.Count > 0)
+                        {
+                            foreach (var item in Model)
+                            {
+                                 <tr>
+                            <td class="text-center">@item.Id</td>
+                            <td class="text-center">@item.OperationDate</td>
                             <td class="text-center">ŞUBAT</td>
-                            <td class="text-center">AKSARAY</td>
-                            <td class="text-center">ÇÖP</td>
-                            <td class="text-center">ŞARAPLAR</td>
-                            <td class="text-center">1</td>
-                            <td class="text-center">ADET</td>
-                            <td class="text-center">ÇÖP-BELEDİYE</td>
-                            <td class="text-center"><button>...</button></td>
-                        </tr>
+                            <td class="text-center">@item.Store.Name</td>
+                            <td class="text-center">@item.WasteType.Description</td>
+                            <td class="text-center">@item.KindOfWaste.Description</td>
+                            <td class="text-center">@item.Quantity</td>
+                            <td class="text-center">@item.Unit.Description</td>
+                            <td class="text-center">@item.ReceivingCompany.Description</td>
+                            <td><a asp-action="Update" asp-controller="Area" asp-area="Admin" asp-route-id="@item.Id" type="button" class="btn btn-outline-warning">Edit</a></td>
+                                <td><button onclick="RemoveItem('Area',@item.Id)" type="button" class="btn btn-outline-danger">Delete</button></td>
+                        </tr> 
+                            }
+                           
+                        }
+                       
                     </tbody>
                 </table>
             </div>
@@ -167,13 +177,13 @@
                         <div class="row col-md-12">
                             <div class="col-md-6">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" value="Türkçe" id="flexRadioDefault1" checked>
                                     <label class="form-check-label" for="flexRadioDefault1">
                                         Türkçe
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" value="English" id="flexRadioDefault2">
                                     <label class="form-check-label" for="flexRadioDefault2">
                                         English
                                     </label>
@@ -196,7 +206,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Kaydet</button>
+                <button type="button" onclick="Create()" class="btn btn-primary">Kaydet</button>
                 <button type="button" onclick="CloseModal()" class="btn btn-danger">Kapat</button>
             </div>
         </div>
@@ -253,6 +263,41 @@
             }
         });
     }
+
+function Create() {
+    var RecordAddViewModel = {};
+    debugger;
+    RecordAddViewModel.StoreId = $("#store").val();
+    RecordAddViewModel.WasteTypeId = $("#wasteType").val();
+    RecordAddViewModel.KindOfWasteId = $("#kindOfWaste").val();
+    RecordAddViewModel.Quantity = $("#quantity").val();
+    RecordAddViewModel.UnitId = $("#unit").val();
+    RecordAddViewModel.ReceivingCompanyId = $("#receivingCompany").val();
+    RecordAddViewModel.Content = $("#content").val();
+    RecordAddViewModel.ContentLanguage = $("input[name='flexRadioDefault']").val();
+    RecordAddViewModel.OperationDate = $("#wasteDate").val();
+
+     $.ajax({
+                type: "POST",
+                url: '@Url.Action("Create","Home")',
+                data: RecordAddViewModel, 
+                success: function (data) {
+                    if (data.status == "success") {
+                        SweetAlert('success', '', 'Kayıt başarılı bir şekilde eklendi.', '');
+
+                       
+                    }
+                    else {
+                        SweetAlert('error', '', data.message, 'Tamam');
+                       
+                    }
+
+                }
+            });
+
+
+    
+}
 
     function CloseModal() {
         $("#createModal").toggle();

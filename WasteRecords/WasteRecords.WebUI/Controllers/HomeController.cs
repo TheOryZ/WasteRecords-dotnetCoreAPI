@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using WasteRecords.WebUI.ApiServices.Interfaces;
@@ -23,10 +24,12 @@ namespace WasteRecords.WebUI.Controllers
         private readonly IKindOfWasteApiService _kindOfWasteApiService;
         private readonly IReceivingCompanyApiService _receivingCompanyApiService;
         private readonly IRecordApiService _recordApiService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly string token;
 
-        public HomeController(ILogger<HomeController> logger, IAuthApiService authApiService, IUnitApiService unitApiService, 
-            IStoreApiService storeApiService, IWasteTypeApiService wasteTypeApiService, IKindOfWasteApiService kindOfWasteApiService, 
-            IReceivingCompanyApiService receivingCompanyApiService, IRecordApiService recordApiService)
+        public HomeController(ILogger<HomeController> logger, IAuthApiService authApiService, IUnitApiService unitApiService,
+            IStoreApiService storeApiService, IWasteTypeApiService wasteTypeApiService, IKindOfWasteApiService kindOfWasteApiService,
+            IReceivingCompanyApiService receivingCompanyApiService, IRecordApiService recordApiService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _authApiService = authApiService;
@@ -36,11 +39,17 @@ namespace WasteRecords.WebUI.Controllers
             _kindOfWasteApiService = kindOfWasteApiService;
             _receivingCompanyApiService = receivingCompanyApiService;
             _recordApiService = recordApiService;
+            _httpContextAccessor = httpContextAccessor;
+            token = _httpContextAccessor.HttpContext.Session.GetString("token");
         }
 
         public IActionResult Index()
         {
-            return View();
+            var response = _recordApiService.GetAllWithParameters();
+
+            return View(response.Content);
+
+
         }
         public IActionResult SignIn()
         {
@@ -124,6 +133,17 @@ namespace WasteRecords.WebUI.Controllers
             };
             var result = JsonConvert.SerializeObject(model);
             return Json(result);
+        }
+
+        [HttpPost]
+        public JsonResult Create(RecordAddViewModel model)
+        {
+
+            var response = _recordApiService.Add(model, token);
+            if (response.IsSuccess)
+                return Json(new { status = "success" });
+            return Json(new { status = "error" });
+
         }
     }
 }
