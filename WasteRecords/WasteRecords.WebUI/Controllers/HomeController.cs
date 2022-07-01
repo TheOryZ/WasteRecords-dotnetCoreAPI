@@ -138,12 +138,19 @@ namespace WasteRecords.WebUI.Controllers
         [HttpPost]
         public JsonResult Create(RecordAddViewModel model)
         {
-
             var response = _recordApiService.Add(model, token);
             if (response.IsSuccess)
                 return Json(new { status = "success" });
             return Json(new { status = "error" });
 
+        }
+        [HttpDelete]
+        public IActionResult Remove(int id)
+        {
+            var response = _recordApiService.Remove(id, token);
+            if (response.IsSuccess)
+                return Json(new { success = true, message = "The record has been successfully deleted" });
+            return Json(new { success = false, message = "An unexpected error occurred while deleting the record" });
         }
     }
 }

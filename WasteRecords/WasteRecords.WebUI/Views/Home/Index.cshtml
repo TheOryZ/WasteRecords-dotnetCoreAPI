@@ -51,13 +51,11 @@
                             <td class="text-center">@item.Quantity</td>
                             <td class="text-center">@item.Unit.Description</td>
                             <td class="text-center">@item.ReceivingCompany.Description</td>
-                            <td><a asp-action="Update" asp-controller="Area" asp-area="Admin" asp-route-id="@item.Id" type="button" class="btn btn-outline-warning">Edit</a></td>
-                                <td><button onclick="RemoveItem('Area',@item.Id)" type="button" class="btn btn-outline-danger">Delete</button></td>
+                            <td><a asp-action="Update" asp-area="Admin" asp-route-id="@item.Id" type="button" class="btn btn-outline-warning">Edit</a></td>
+                                <td><button onclick="RemoveItem(@item.Id)" type="button" class="btn btn-outline-danger">Delete</button></td>
                         </tr> 
-                            }
-                           
-                        }
-                       
+                            }                          
+                        }                       
                     </tbody>
                 </table>
             </div>
@@ -264,7 +262,7 @@
         });
     }
 
-function Create() {
+    function Create() {
     var RecordAddViewModel = {};
     debugger;
     RecordAddViewModel.StoreId = $("#store").val();
@@ -302,4 +300,5 @@ function Create() {
     function CloseModal() {
         $("#createModal").toggle();
     }
+
 </script>

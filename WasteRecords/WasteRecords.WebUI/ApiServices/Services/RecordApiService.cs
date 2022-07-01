@@ -27,7 +27,7 @@ namespace WasteRecords.WebUI.ApiServices.Services
 
         public ResponseState<List<RecordListWithRelationsViewModel>> GetAllWithParameters()
         {
-            var uri = string.Format("{0}/{1}", url, "Records", "GetAllWithParameters");
+            var uri = string.Format("{0}/{1}/{2}", url, "Records", "GetAllWithParameters");
             return _accessRest.GetMethod<List<RecordListWithRelationsViewModel>>(uri);
         }
 
