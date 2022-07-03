@@ -44,7 +44,7 @@
                                 <tr>
                                     <td class="text-center">@item.Id</td>
                                     <td class="text-center">@item.OperationDate</td>
-                                    <td class="text-center">ŞUBAT</td>
+                                    <td class="text-center">@item.Month</td>
                                     <td class="text-center">@item.Store.Name</td>
                                     <td class="text-center">@item.WasteType.Description</td>
                                     <td class="text-center">@item.KindOfWaste.Description</td>
@@ -94,7 +94,6 @@
                                 <div class="form-group">
                                     <label>Ay*</label>
                                     <select id="mount" class="form-select" required placeholder="Seçiniz">
-                                        <option value="-1">Seçiniz</option>
                                         <option value="Ocak">Ocak</option>
                                         <option value="Şubat">Şubat</option>
                                         <option value="Mart">Mart</option>
@@ -242,8 +241,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Ay*</label>
-                                    <select id="mount" class="form-select" required placeholder="Seçiniz">
-                                        <option value="-1">Seçiniz</option>
+                                    <select id="mountUpdate" class="form-select" required placeholder="Seçiniz">
                                         <option value="Ocak">Ocak</option>
                                         <option value="Şubat">Şubat</option>
                                         <option value="Mart">Mart</option>
@@ -380,42 +378,47 @@
                     $.each(response.Stores, function(index, value) {
                         txtStore += "<option value='" + value.Id + "'>" + value.Name + "</option>";
                     });
+                    $("#store").find('option').remove();
                     $("#store").append(txtStore);
 
                     let txtWasteType = "";
                     $.each(response.wasteTypes, function(index, value) {
                         txtWasteType += "<option value='" + value.Id + "'>" + value.Description + "</option>";
                     });
+                    $("#wasteType").find('option').remove();
                     $("#wasteType").append(txtWasteType);
 
                     let txtKindOfWastes = "";
                     $.each(response.KindOfWastes, function(index, value) {
                         txtKindOfWastes += "<option value='" + value.Id + "'>" + value.Description + "</option>";
                     });
+                    $("#kindOfWaste").find('option').remove();
                     $("#kindOfWaste").append(txtKindOfWastes);
 
                     let txtUnits = "";
                     $.each(response.Units, function(index, value) {
                         txtUnits += "<option value='" + value.Id + "'>" + value.Description + "</option>";
                     });
+                    $("#unit").find('option').remove();
                     $("#unit").append(txtUnits);
 
                     let txtReceivingCompanies = "";
                     $.each(response.ReceivingCompanies, function(index, value) {
                         txtReceivingCompanies += "<option value='" + value.Id + "'>" + value.Description + "</option>";
                     });
+                    $("#receivingCompany").find('option').remove();
                     $("#receivingCompany").append(txtReceivingCompanies);
 
                 }
             });
         }
-
         function Create() {
             var RecordAddViewModel = {};
 
             RecordAddViewModel.StoreId = $("#store").val();
             RecordAddViewModel.WasteTypeId = $("#wasteType").val();
             RecordAddViewModel.KindOfWasteId = $("#kindOfWaste").val();
+            RecordAddViewModel.Month = $("#mount").val();
             RecordAddViewModel.Quantity = $("#quantity").val();
             RecordAddViewModel.UnitId = $("#unit").val();
             RecordAddViewModel.ReceivingCompanyId = $("#receivingCompany").val();
@@ -439,7 +442,6 @@
                     }
             });
         }
-
         function GetInformationById(id){
             $("#recordId").val(id);
             $("#updateModal").toggle();
@@ -461,6 +463,7 @@
                             txtStore += "<option value='" + value.Id + "'>" + value.Name + "</option>";
                         }
                     });
+                    $("#storeUpdate").find('option').remove();
                     $("#storeUpdate").append(txtStore);
 
                     let txtWasteType = "";
@@ -473,6 +476,7 @@
                             txtWasteType += "<option value='" + value.Id + "'>" + value.Description + "</option>";
                         }
                     });
+                    $("#wasteTypeUpdate").find('option').remove();
                     $("#wasteTypeUpdate").append(txtWasteType);
 
                     let txtKindOfWastes = "";
@@ -485,6 +489,7 @@
                             txtKindOfWastes += "<option value='" + value.Id + "'>" + value.Description + "</option>";
                         }
                     });
+                    $("#kindOfWasteUpdate").find('option').remove();
                     $("#kindOfWasteUpdate").append(txtKindOfWastes);
 
                     $("#quantityUpdate").val(response.Record.Quantity);
@@ -499,6 +504,7 @@
                             txtUnits += "<option value='" + value.Id + "'>" + value.Description + "</option>";
                         }
                     });
+                    $("#unitUpdate").find('option').remove();
                     $("#unitUpdate").append(txtUnits);
 
                     let txtReceivingCompanies = "";
@@ -511,6 +517,7 @@
                             txtReceivingCompanies += "<option value='" + value.Id + "'>" + value.Description + "</option>";
                         }
                     });
+                    $("#receivingCompanyUpdate").find('option').remove();
                     $("#receivingCompanyUpdate").append(txtReceivingCompanies);
 
                     $("#wasteDateUpdate").val(response.Record.OperationDate);
@@ -531,7 +538,6 @@
                 }
             });
         }
-
         function Update(){
             
             var RecordUpdateViewModel = {};
@@ -541,6 +547,7 @@
             RecordUpdateViewModel.StoreId = $("#storeUpdate").val();
             RecordUpdateViewModel.WasteTypeId = $("#wasteTypeUpdate").val();
             RecordUpdateViewModel.KindOfWasteId = $("#kindOfWasteUpdate").val();
+            RecordUpdateViewModel.Month = $("#mountUpdate").val();
             RecordUpdateViewModel.Quantity = $("#quantityUpdate").val();
             RecordUpdateViewModel.UnitId = $("#unitUpdate").val();
             RecordUpdateViewModel.ReceivingCompanyId = $("#receivingCompanyUpdate").val();
