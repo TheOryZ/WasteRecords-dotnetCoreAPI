@@ -10,7 +10,7 @@
             <div class="card-header">
                 <h3 class="card-title">İşlemler</h3>
                 <div class="card-tools">
-                    <button type="button" onclick="CreateRecord()" class="btn btn-outline btn-success" data-card-widget="collapse">
+                    <button type="button" style="float:right;" onclick="GetInformations()" class="btn btn-outline btn-success" data-card-widget="collapse">
                         Ekle
                     </button>
                     <button type="button" class="btn btn-tool" data-card-widget="remove">
@@ -41,21 +41,21 @@
                         {
                             foreach (var item in Model)
                             {
-                                 <tr>
-                            <td class="text-center">@item.Id</td>
-                            <td class="text-center">@item.OperationDate</td>
-                            <td class="text-center">ŞUBAT</td>
-                            <td class="text-center">@item.Store.Name</td>
-                            <td class="text-center">@item.WasteType.Description</td>
-                            <td class="text-center">@item.KindOfWaste.Description</td>
-                            <td class="text-center">@item.Quantity</td>
-                            <td class="text-center">@item.Unit.Description</td>
-                            <td class="text-center">@item.ReceivingCompany.Description</td>
-                            <td><a asp-action="Update" asp-area="Admin" asp-route-id="@item.Id" type="button" class="btn btn-outline-warning">Edit</a></td>
-                                <td><button onclick="RemoveItem(@item.Id)" type="button" class="btn btn-outline-danger">Delete</button></td>
-                        </tr> 
-                            }                          
-                        }                       
+                                <tr>
+                                    <td class="text-center">@item.Id</td>
+                                    <td class="text-center">@item.OperationDate</td>
+                                    <td class="text-center">ŞUBAT</td>
+                                    <td class="text-center">@item.Store.Name</td>
+                                    <td class="text-center">@item.WasteType.Description</td>
+                                    <td class="text-center">@item.KindOfWaste.Description</td>
+                                    <td class="text-center">@item.Quantity</td>
+                                    <td class="text-center">@item.Unit.Description</td>
+                                    <td class="text-center">@item.ReceivingCompany.Description</td>
+                                    <td><button onclick="GetInformationById(@item.Id)" type="button" class="btn btn-outline-warning">Edit</button></td>
+                                    <td><button onclick="RemoveItem(@item.Id)" type="button" class="btn btn-outline-danger">Delete</button></td>
+                                </tr>
+                            }
+                        }
                     </tbody>
                 </table>
             </div>
@@ -167,7 +167,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Atık Tarihi*</label>
-                                    <input id="wasteDate" class="form-control" type="datetime-local" value="@DateTime.Now.ToString("dd.MM.yyyy hh:mm")">
+                                    <input id="wasteDate" class="form-control" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm").Replace(' ','T')">
                                 </div>
                             </div>
                         </div>
@@ -209,8 +209,155 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal" id="updateModal" data-toggle="modal" tabindex="-1" role="dialog">
+    <input type="hidden" id="recordId" />
+
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" onclick="CloseUpdateModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card card-secondary">
+                    <div class="card-header">
+                        <h3 class="card-title">Güncelle</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <div class="card-body">
+                        <div class="row col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Ay*</label>
+                                    <select id="mount" class="form-select" required placeholder="Seçiniz">
+                                        <option value="-1">Seçiniz</option>
+                                        <option value="Ocak">Ocak</option>
+                                        <option value="Şubat">Şubat</option>
+                                        <option value="Mart">Mart</option>
+                                        <option value="Nisan">Nisan</option>
+                                        <option value="Mayıs">Mayıs</option>
+                                        <option value="Haziran">Haziran</option>
+                                        <option value="Temmuz">Temmuz</option>
+                                        <option value="Ağustos">Ağustos</option>
+                                        <option value="Eylül">Eylül</option>
+                                        <option value="Ekim">Ekim</option>
+                                        <option value="Kasım">Kasım</option>
+                                        <option value="Aralık">Aralık</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Mağaza*</label>
+                                    <select id="storeUpdate" class="form-select" required placeholder="Seçiniz">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Atık Tipi*</label>
+                                    <select id="wasteTypeUpdate" class="form-select" required placeholder="Seçiniz">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Atık Çeşidi*</label>
+                                    <select id="kindOfWasteUpdate" class="form-select" required placeholder="Seçiniz">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Miktar*</label>
+                                    <input type="text" id="quantityUpdate" class="form-control" required />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Birim*</label>
+                                    <select id="unitUpdate" class="form-select" required placeholder="Seçiniz">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Teslim Alan Firma*</label>
+                                    <select id="receivingCompanyUpdate" class="form-select" required placeholder="Seçiniz">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Atık Tarihi*</label>
+                                    <input id="wasteDateUpdate" class="form-control" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm").Replace(' ','T')">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefaultUpdate" value="Türkçe" id="updateRadio1" checked>
+                                    <label class="form-check-label" for="updateRadio1">
+                                        Türkçe
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefaultUpdate" value="English" id="updateRadio2">
+                                    <label class="form-check-label" for="updateRadio2">
+                                        English
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
 
 
+                        <div class="row col-md-12">
+                            <label>İçerik*</label>
+                            <textarea id="contentUpdate" class="form-control" rows="5" cols="33"></textarea>
+                        </div>
+
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="Update()" class="btn btn-primary">Kaydet</button>
+                <button type="button" onclick="CloseUpdateModal()" class="btn btn-danger">Kapat</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -218,87 +365,212 @@
 
 
 <script>
-    function CreateRecord() {
-        $("#createModal").toggle();
 
-        $.ajax({
-            type: "GET",
-            url: '@Url.Action("GetInformations","Home")',
+        function GetInformations() {
+            $("#createModal").toggle();
 
-            success: function(data) {
-                var response = JSON.parse(data);
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetInformations","Home")',
 
-                let txtStore = "";
-                $.each(response.Stores, function(index, value) {
-                    txtStore += "<option value='" + value.Id + "'>" + value.Name + "</option>";
-                });
-                $("#store").append(txtStore);
+                success: function(data) {
+                    var response = JSON.parse(data);
 
-                let txtWasteType = "";
-                $.each(response.wasteTypes, function(index, value) {
-                    txtWasteType += "<option value='" + value.Id + "'>" + value.Description + "</option>";
-                });
-                $("#wasteType").append(txtWasteType);
+                    let txtStore = "";
+                    $.each(response.Stores, function(index, value) {
+                        txtStore += "<option value='" + value.Id + "'>" + value.Name + "</option>";
+                    });
+                    $("#store").append(txtStore);
 
-                let txtKindOfWastes = "";
-                $.each(response.KindOfWastes, function(index, value) {
-                    txtKindOfWastes += "<option value='" + value.Id + "'>" + value.Description + "</option>";
-                });
-                $("#kindOfWaste").append(txtKindOfWastes);
+                    let txtWasteType = "";
+                    $.each(response.wasteTypes, function(index, value) {
+                        txtWasteType += "<option value='" + value.Id + "'>" + value.Description + "</option>";
+                    });
+                    $("#wasteType").append(txtWasteType);
 
-                let txtUnits = "";
-                $.each(response.Units, function(index, value) {
-                    txtUnits += "<option value='" + value.Id + "'>" + value.Description + "</option>";
-                });
-                $("#unit").append(txtUnits);
+                    let txtKindOfWastes = "";
+                    $.each(response.KindOfWastes, function(index, value) {
+                        txtKindOfWastes += "<option value='" + value.Id + "'>" + value.Description + "</option>";
+                    });
+                    $("#kindOfWaste").append(txtKindOfWastes);
 
-                let txtReceivingCompanies = "";
-                $.each(response.ReceivingCompanies, function(index, value) {
-                    txtReceivingCompanies += "<option value='" + value.Id + "'>" + value.Description + "</option>";
-                });
-                $("#receivingCompany").append(txtReceivingCompanies);
+                    let txtUnits = "";
+                    $.each(response.Units, function(index, value) {
+                        txtUnits += "<option value='" + value.Id + "'>" + value.Description + "</option>";
+                    });
+                    $("#unit").append(txtUnits);
 
-            }
-        });
-    }
-
-    function Create() {
-    var RecordAddViewModel = {};
-    debugger;
-    RecordAddViewModel.StoreId = $("#store").val();
-    RecordAddViewModel.WasteTypeId = $("#wasteType").val();
-    RecordAddViewModel.KindOfWasteId = $("#kindOfWaste").val();
-    RecordAddViewModel.Quantity = $("#quantity").val();
-    RecordAddViewModel.UnitId = $("#unit").val();
-    RecordAddViewModel.ReceivingCompanyId = $("#receivingCompany").val();
-    RecordAddViewModel.Content = $("#content").val();
-    RecordAddViewModel.ContentLanguage = $("input[name='flexRadioDefault']").val();
-    RecordAddViewModel.OperationDate = $("#wasteDate").val();
-
-     $.ajax({
-                type: "POST",
-                url: '@Url.Action("Create","Home")',
-                data: RecordAddViewModel, 
-                success: function (data) {
-                    if (data.status == "success") {
-                        SweetAlert('success', '', 'Kayıt başarılı bir şekilde eklendi.', '');
-
-                       
-                    }
-                    else {
-                        SweetAlert('error', '', data.message, 'Tamam');
-                       
-                    }
+                    let txtReceivingCompanies = "";
+                    $.each(response.ReceivingCompanies, function(index, value) {
+                        txtReceivingCompanies += "<option value='" + value.Id + "'>" + value.Description + "</option>";
+                    });
+                    $("#receivingCompany").append(txtReceivingCompanies);
 
                 }
             });
+        }
+
+        function Create() {
+            var RecordAddViewModel = {};
+
+            RecordAddViewModel.StoreId = $("#store").val();
+            RecordAddViewModel.WasteTypeId = $("#wasteType").val();
+            RecordAddViewModel.KindOfWasteId = $("#kindOfWaste").val();
+            RecordAddViewModel.Quantity = $("#quantity").val();
+            RecordAddViewModel.UnitId = $("#unit").val();
+            RecordAddViewModel.ReceivingCompanyId = $("#receivingCompany").val();
+            RecordAddViewModel.Content = $("#content").val();
+            RecordAddViewModel.ContentLanguage = $('input[name=flexRadioDefault]:checked').val();
+            RecordAddViewModel.OperationDate = $("#wasteDate").val();
+
+            $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Create","Home")',
+                    data: RecordAddViewModel,
+                    success: function (data) {
+                        if (data.success) {
+                            SweetAlert('success', '', 'Kayıt başarılı bir şekilde eklendi.', '');
+                        }
+                        else {
+                            SweetAlert('error', '', data.message, 'Tamam');
+
+                        }
+
+                    }
+            });
+        }
+
+        function GetInformationById(id){
+            $("#recordId").val(id);
+            $("#updateModal").toggle();
+            $("#storeUpdate").find('option').remove();
+            $.ajax({
+                url: '/Home/GetInformationById/'+ id,
+                type: "GET",
+                success: function (data) {
+                    if (data.success) {
+                    var response = JSON.parse(data.content);
+                    console.log(response);
+                    let txtStore = "";
+
+                    $.each(response.Stores, function(index, value) {
+                        if(response.Record.StoreId === value.Id){
+                            txtStore += "<option selected value='" + value.Id + "'>" + value.Name + "</option>";
+                        }
+                        else{
+                            txtStore += "<option value='" + value.Id + "'>" + value.Name + "</option>";
+                        }
+                    });
+                    $("#storeUpdate").append(txtStore);
+
+                    let txtWasteType = "";
+
+                    $.each(response.wasteTypes, function(index, value) {
+                        if(response.Record.WasteTypeId === value.Id){
+                            txtWasteType += "<option selected value='" + value.Id + "'>" + value.Description + "</option>";
+                        }
+                        else{
+                            txtWasteType += "<option value='" + value.Id + "'>" + value.Description + "</option>";
+                        }
+                    });
+                    $("#wasteTypeUpdate").append(txtWasteType);
+
+                    let txtKindOfWastes = "";
+
+                    $.each(response.KindOfWastes, function(index, value) {
+                        if(response.Record.KindOfWasteId === value.Id){
+                            txtKindOfWastes += "<option selected value='" + value.Id + "'>" + value.Description + "</option>";
+                        }
+                        else{
+                            txtKindOfWastes += "<option value='" + value.Id + "'>" + value.Description + "</option>";
+                        }
+                    });
+                    $("#kindOfWasteUpdate").append(txtKindOfWastes);
+
+                    $("#quantityUpdate").val(response.Record.Quantity);
+
+                    let txtUnits = "";
+
+                    $.each(response.Units, function(index, value) {
+                        if(response.Record.UnitId === value.Id){
+                            txtUnits += "<option selected value='" + value.Id + "'>" + value.Description + "</option>";
+                        }
+                        else{
+                            txtUnits += "<option value='" + value.Id + "'>" + value.Description + "</option>";
+                        }
+                    });
+                    $("#unitUpdate").append(txtUnits);
+
+                    let txtReceivingCompanies = "";
+
+                    $.each(response.ReceivingCompanies, function(index, value) {
+                        if(response.Record.ReceivingCompanyId === value.Id){
+                            txtReceivingCompanies += "<option selected value='" + value.Id + "'>" + value.Description + "</option>";
+                        }
+                        else{
+                            txtReceivingCompanies += "<option value='" + value.Id + "'>" + value.Description + "</option>";
+                        }
+                    });
+                    $("#receivingCompanyUpdate").append(txtReceivingCompanies);
+
+                    $("#wasteDateUpdate").val(response.Record.OperationDate);
+
+                    $("#contentUpdate").val(response.Record.Content);
+
+                    if(response.Record.ContentLanguage == "English")
+                        $("#updateRadio2").prop("checked", true);
+                    else
+                        $("#updateRadio1").prop("checked", true);
+                    }
 
 
-    
-}
+                },
+                error: function (data) {
+                   console.log("asd");
 
-    function CloseModal() {
-        $("#createModal").toggle();
-    }
+                }
+            });
+        }
+
+        function Update(){
+            
+            var RecordUpdateViewModel = {};
+            
+            RecordUpdateViewModel.Id = $("#recordId").val();
+            RecordUpdateViewModel.isActive = true;
+            RecordUpdateViewModel.StoreId = $("#storeUpdate").val();
+            RecordUpdateViewModel.WasteTypeId = $("#wasteTypeUpdate").val();
+            RecordUpdateViewModel.KindOfWasteId = $("#kindOfWasteUpdate").val();
+            RecordUpdateViewModel.Quantity = $("#quantityUpdate").val();
+            RecordUpdateViewModel.UnitId = $("#unitUpdate").val();
+            RecordUpdateViewModel.ReceivingCompanyId = $("#receivingCompanyUpdate").val();
+            RecordUpdateViewModel.Content = $("#contentUpdate").val();
+            RecordUpdateViewModel.ContentLanguage =$('input[name=flexRadioDefaultUpdate]:checked').val();
+            RecordUpdateViewModel.OperationDate = $("#wasteDateUpdate").val();
+
+            $.ajax({
+                    type: "PUT",
+                    url: '@Url.Action("Update","Home")',
+                    data: RecordUpdateViewModel,
+                    success: function (data) {
+                        if (data.success) {
+                            SweetAlert('success', '', 'Kayıt başarılı bir şekilde güncellendi.', '');
+                        }
+                        else {
+                            SweetAlert('error', '', data.message, 'Tamam');
+
+                        }
+
+                    }
+            });
+        }
+
+        function CloseModal() {
+            $("#createModal").toggle();
+        }
+
+        function CloseUpdateModal() {
+            $("#updateModal").toggle();
+        }
 
 </script>

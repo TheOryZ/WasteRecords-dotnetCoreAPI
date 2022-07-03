@@ -67,7 +67,7 @@ namespace WasteRecords.WebUI.Controllers
             }
             return View(model);
         }
-
+        [HttpGet]
         public JsonResult GetInformationById(int id)
         {
             //models
@@ -101,7 +101,7 @@ namespace WasteRecords.WebUI.Controllers
                 ReceivingCompanies = receivingCompanyListViewModel
             };
             var result = JsonConvert.SerializeObject(model);
-            return Json(result);
+            return Json(new {success =true, content = result});
         }
         public JsonResult GetInformations()
         {
@@ -140,8 +140,8 @@ namespace WasteRecords.WebUI.Controllers
         {
             var response = _recordApiService.Add(model, token);
             if (response.IsSuccess)
-                return Json(new { status = "success" });
-            return Json(new { status = "error" });
+                return Json(new { success = true });
+            return Json(new { success = false });
 
         }
         [HttpDelete]
@@ -151,6 +151,17 @@ namespace WasteRecords.WebUI.Controllers
             if (response.IsSuccess)
                 return Json(new { success = true, message = "The record has been successfully deleted" });
             return Json(new { success = false, message = "An unexpected error occurred while deleting the record" });
+        }
+
+        [HttpPut]
+        public IActionResult Update(RecordUpdateViewModel model)
+        {
+            var response = _recordApiService.Update(model, token);
+            if (response.IsSuccess)
+                return Json(new { success = true, message = "The record has been successfully updated" });
+            return Json(new { success = false, message = "An unexpected error occurred while updating the record" });
+
+
         }
     }
 }

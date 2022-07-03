@@ -3,11 +3,25 @@
 
 // Write your JavaScript code.
 $(document).ready(function () {
-    $('.dataTable').DataTable({
+    var myTable = $('.dataTable').DataTable({
         "scrollX": true
 
     });
+
+    $('.dataTables_filter input')
+        .unbind('keypress keyup')
+        .bind('keypress keyup', function (e) {
+            if ($(this).val().length < 2 && e.keyCode != 13) return;
+            myTable.fnFilter($(this).val());
+        });
+    $("#DataTables_Table_0_wrapper > div").css('margin-bottom', '10px')
 });
+
+
+
+
+
+
 function SweetAlert(state, title, text, redirectUrl) {
     let timerInterval
     Swal.fire({
