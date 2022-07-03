@@ -21,6 +21,10 @@ Waste Records Dotnet 6.0 Core API and MVC Project (job interview case study)
 ## Swagger Preview
 ![image](https://user-images.githubusercontent.com/22077576/177050707-46e36384-bbf8-4fa4-8e65-f684535bec38.png)
 
+### Sample User Informations:
+- Email : `admin@admin.com`
+- Password : `admin123`
+
 ## Points to be developed
 - Log can be added
 - Design-side(UI) improvements can be made
